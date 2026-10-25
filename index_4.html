@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clase Práctica 2 | Carrusel de imágenes</title>
+
+  <style>
+    /* ---------- Estilos generales (mismo estilo oscuro de Pyrovi) ---------- */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 24px 16px;
+      background: #0b0b0d;
+      color: #f2f2f2;
+      font-family: Arial, Helvetica, sans-serif;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 1.8rem;
+      color: red;
+    }
+
+    h1 span {
+      color: yellow; /* naranja llama */
+    }
+    h1 .azul{
+      color: blue;
+    }
+    p.sub {
+      margin: 0 0 24px;
+      color: #aaaaaa;
+    }
+
+    /* ---------- Carrusel ---------- */
+    .carrusel {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+      background: #16161a;
+      border: 3px solid #36363c;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .carrusel img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+
+    .pie {
+      padding: 14px 16px;
+    }
+
+    #titulo {
+      margin: 0 0 4px;
+      font-size: 1.1rem;
+    }
+
+    #contador {
+      margin: 0;
+      color: #aaaaaa;
+      font-size: 0.9rem;
+    }
+
+    /* Botones de flecha */
+    .flecha {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.6);
+      color: #ffffff;
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+
+    .flecha:hover {
+      background: #ff6a1a;
+    }
+
+    #anterior {
+      left: 12px;
+    }
+
+    #siguiente {
+      right: 12px;
+    }
+
+    /* ---------- Enlaces ---------- */
+    nav {
+      margin-top: 20px;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: #ff6a1a;
+      text-decoration: none;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+      color: orangered;
+    }
+   .Grupo h4 {
+  margin: 0;
+  }
+
+  .Grupo p {
+  margin: 0;
+  }
+    /* ---------- Celular ---------- */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.4rem;
+      }
+
+      .flecha {
+        width: 38px;
+        height: 38px;
+        font-size: 1.2rem;
+      }
+    }
+   
+  </style>
+</head>
+
+<body>
+  <h1><span>Galería</span> <span class="azul">de</span> Ecuador</h1>
+  <p class="sub">Usa las flechas para cambiar de imagen</p>
+
+  <div class="carrusel">
+    <button id="anterior" class="flecha" aria-label="Imagen anterior">&#10094;</button>
+
+    <img id="foto" src="" alt="">
+
+    <button id="siguiente" class="flecha" aria-label="Imagen siguiente">&#10095;</button>
+
+    <div class="pie">
+      <h2 id="titulo"></h2>
+      <p id="contador"></p>
+    </div>
+  </div>
+  <div class="Grupo">
+    <h4>Grupo.04</h4>
+    <p>Jorge Villamar, Norka Mideros, Liseth Criollo, Bruce Balarezo, Chinlle Carrillo</p>
+  </div>
+ 
+
+  <script>
+    // Es como una lista de Python: cada elemento es un diccionario con src y titulo
+    const imagenes = [
+      { src: "https://images.pexels.com/photos/19298064/pexels-photo-19298064.jpeg", titulo: "Paisaje 1" },
+      { src: "https://www.visitcuencaecuador.com.ec/wp-content/uploads/2022/09/19e5ed_b0def82b7d9f49ff960aa0c3ff9a631e_mv2.jpg", titulo: "Paisaje 2" },
+      { src: "https://www.turismodeestrellas.com/media/files/7823_leon-dormido-en-la-isla-san-cristobal-galapagos-brandt-ryder.jpg", titulo: "Paisaje 3" },
+      { src: "https://images.pexels.com/photos/25749020/pexels-photo-25749020.jpeg", titulo: "Paisaje 4" }
+    ];
+
+    // Posición actual (el índice de la lista, empieza en 0)
+    let indice = 0;
+
+    const foto = document.getElementById("foto");
+    const titulo = document.getElementById("titulo");
+    const contador = document.getElementById("contador");
+
+    // Cambia lo que se ve en pantalla según el índice actual
+    function mostrar() {
+      foto.src = imagenes[indice].src;
+      foto.alt = imagenes[indice].titulo;
+      titulo.textContent = imagenes[indice].titulo;
+      contador.textContent = (indice + 1) + " de " + imagenes.length;
+    }
+
+    // % (módulo) hace que al llegar al final vuelva al inicio
+    function siguiente() {
+      indice = (indice + 1) % imagenes.length;
+      mostrar();
+    }
+
+    // Se suma imagenes.length antes del % para que no salga un número negativo
+    function anterior() {
+      indice = (indice - 1 + imagenes.length) % imagenes.length;
+      mostrar();
+    }
+
+    // Cada botón ejecuta su función cuando le hacen clic
+    document.getElementById("siguiente").addEventListener("click", siguiente);
+    document.getElementById("anterior").addEventListener("click", anterior);
+
+    // Mostrar la primera imagen al cargar la página
+    mostrar();
+  </script>
+</body>
+</html>
